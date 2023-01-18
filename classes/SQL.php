@@ -38,22 +38,6 @@ class Connexion {
 		}
 	}
 
-	public function query($sql,Array $cond = null){
-		$stmt = $this->connec->prepare($sql);
-
-		if($cond){
-			foreach ($cond as $v) {
-				$stmt->bindParam($v[0],$v[1],$v[2]);
-			}
-		}
-
-		$stmt->execute();
-
-		return $stmt->fetchAll();
-		$stmt->closeCursor();
-		$stmt=NULL;
-	}
-
     
 
 }

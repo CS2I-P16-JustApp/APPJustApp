@@ -117,4 +117,12 @@ class JWT
             $token
         ) === 1;
     }
+
+    function decode($token){
+
+        $parts = explode(".", $token);
+        $payload = json_decode(base64_decode($parts[1]));
+
+        return $payload;
+    }
 }
