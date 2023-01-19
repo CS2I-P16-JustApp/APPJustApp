@@ -29,7 +29,8 @@ foreach ($results as $result)
 {
     $message[] = [
         'contenu' => $result['contenu'],
-        'id_user' => $result['id_user']
+        'id_user' => $result['id_user'],
+        'titre' =>  $result['titre_discussion']
     ];
 }
 echo json_encode(["code" => 200, "msg" => $message]);

@@ -114,7 +114,7 @@ class BDDHelper {
 
     // findAll() table message
     function findAllMessage($id_discussion){
-        $request = $this->bdd->query("SELECT contenu, id_user FROM message m
+        $request = $this->bdd->query("SELECT contenu, id_user, d.titre_discussion FROM message m
         INNER JOIN discussion d ON m.id_discussion = d.id_discussion
         WHERE d.id_discussion = " . $id_discussion . "ORDER BY date ASC");
         
