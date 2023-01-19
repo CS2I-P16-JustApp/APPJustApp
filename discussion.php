@@ -15,19 +15,25 @@ $jwt = new JWT();
 
 // On vérifie la validité
 if(!is_null($data->token)){
-    if($jwt->isValid($data->token) && !$jwt->isExpired($data->token) && $jwt->check($data->token, SECRET)){
+    if(!$jwt->isValid($data->token) || $jwt->isExpired($data->token) || !$jwt->check($data->token, 'projetP16Cs2i')){
 
         echo json_encode(["code" => 500, "msg" => "invalid token"]);
         die;
     }
 }
 
-$results = $BDDHelper->findAllDiscussion($data->id_user);
+
+$parts = explode(".", $data->token);
+$decode = json_decode(base64_decode($parts[1]));
+
+$results = $BDDHelper->findAllDiscussion($decode->id);
 
 foreach ($results as $result) 
 {
     $discussion[] = [
+        'id_discussion' => $result['id_discussion'],
         'titre_discussion' => $result['titre_discussion']
+
     ];
 }
 echo json_encode([

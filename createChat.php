@@ -1,5 +1,5 @@
 <?php
-eader('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
 header("Access-Control-Allow-Headers: X-Requested-With");
 
@@ -12,6 +12,15 @@ $data = json_decode($postdata);
 
 $BDDHelper = new BDDHelper();
 $jwt = new JWT();
+
+// On vérifie la validité
+if(!is_null($data->token)){
+    if(!$jwt->isValid($data->token) || $jwt->isExpired($data->token) || !$jwt->check($data->token, SECRET)){
+
+        echo json_encode(["code" => 500, "msg" => "invalid token"]);
+        die;
+    }
+}
 
 if($BDDHelper->createChat($data)){
     echo json_encode(["code" => 200, "msg" => "chat inserted in bdd"]);

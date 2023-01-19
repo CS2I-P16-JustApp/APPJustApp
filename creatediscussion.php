@@ -16,9 +16,9 @@ $jwt = new JWT();
 
 // On vérifie la validité
 if(!is_null($result->token)){
-    if(!$jwt->isValid($result->token) && $jwt->isExpired($result->token) && !$jwt->check($result->token, SECRET)){
+    if(!$jwt->isValid($result->token) || $jwt->isExpired($result->token) || !$jwt->check($result->token, SECRET)){
 
-        echo json_encode(["code" => 500, "msg" => "error token" ]);
+        echo json_encode(["code" => 500, "msg" => "invalid token"]);
         die;
     }
 }

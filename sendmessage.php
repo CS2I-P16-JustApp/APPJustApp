@@ -13,6 +13,15 @@ $postdata = file_get_contents("php://input");
 $result = json_decode($postdata);
 
 
+// On vérifie la validité
+if(!is_null($result->token)){
+    if(!$jwt->isValid($result->token) || $jwt->isExpired($result->token) || !$jwt->check($result->token, SECRET)){
+
+        echo json_encode(["code" => 500, "msg" => "invalid token"]);
+        die;
+    }
+}
+
 if($jwt->isValid($result->token) && !$jwt->isExpired($result->token) && $jwt->check($result->token, SECRET)){
     $parts = explode(".", $result->token);
     $decode = json_decode(base64_decode($parts[1]));

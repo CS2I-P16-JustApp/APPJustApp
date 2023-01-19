@@ -13,7 +13,14 @@ $jwt = new JWT();
 $postdata = file_get_contents("php://input");
 $data = json_decode($postdata);
 
+// On vérifie la validité
+if(!is_null($data->token)){
+    if(!$jwt->isValid($data->token) || $jwt->isExpired($data->token) || !$jwt->check($data->token, SECRET)){
 
+        echo json_encode(["code" => 500, "msg" => "invalid token"]);
+        die;
+    }
+}
 
 $token = $data->token;
 $parts = explode(".", $token);

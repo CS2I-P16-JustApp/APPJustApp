@@ -77,11 +77,12 @@ class BDDHelper {
 
     function findAllPost(){
         $request = $this->bdd->query(
-            "SELECT po.contenu, po.date, rea.like, com.contenu as contenu_com, img.image  FROM post po
-        LEFT JOIN reaction rea ON po.id_post = rea.id_post
-        LEFT JOIN post_img img ON po.id_post = img.id_post
-        LEFT JOIN commentaires com ON po.id_post = com.id_post
-        ORDER BY po.date ASC"
+            "SELECT po.contenu,po.id_post, u.username, po.date, rea.like, com.contenu as contenu_com, img.image  FROM post po
+            LEFT JOIN reaction rea ON po.id_post = rea.id_post
+            LEFT JOIN utilisateur u ON po.id_user = u.id_user
+            LEFT JOIN post_img img ON po.id_post = img.id_post
+            LEFT JOIN commentaires com ON po.id_post = com.id_post
+            ORDER BY po.date DESC"
         );
         
         return $request->fetchAll();
@@ -113,7 +114,7 @@ class BDDHelper {
 
     // findAll() table message
     function findAllMessage($id_discussion){
-        $request = $this->bdd->query("SELECT contenu FROM message m
+        $request = $this->bdd->query("SELECT contenu, id_user FROM message m
         INNER JOIN discussion d ON m.id_discussion = d.id_discussion
         WHERE d.id_discussion = " . $id_discussion . "ORDER BY date ASC");
         
@@ -122,9 +123,7 @@ class BDDHelper {
 
     // findAll() table discussion
     function findAllDiscussion($id_user){
-        $request = $this->bdd->query("SELECT * FROM discussion d
-        INNER JOIN user_discussion us ON d.id_discussion = us.id_discussion
-        WHERE us.id_user = " . $id_user);
+        $request = $this->bdd->query("SELECT * FROM discussion d INNER JOIN user_discussion us ON d.id_discussion = us.id_discussion WHERE us.id_user = '" . $id_user . "'");
         
         return $request->fetchAll();
     }
